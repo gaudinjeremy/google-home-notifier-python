@@ -5,7 +5,12 @@ import logging
 from gtts import gTTS
 from slugify import slugify
 from pathlib import Path
-from urllib.parse import urlparse
+#from urllib.parse import urlparse
+
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -17,7 +22,7 @@ logging.info("Starting up chromecasts")
 chromecasts = pychromecast.get_chromecasts()
 cast = next(cc for cc in chromecasts if cc.device.friendly_name == chromecast_name)
 
-def play_tts(text, lang='en', slow=False):
+def play_tts(text, lang='fr', slow=False):
     tts = gTTS(text=text, lang=lang, slow=slow)
     filename = slugify(text+"-"+lang+"-"+str(slow)) + ".mp3"
     path = "/static/cache/"
@@ -60,7 +65,7 @@ def say():
     if not text:
         return False
     if not lang:
-        lang = "en"
+        lang = "fr"
     play_tts(text, lang=lang)
     return text
 
